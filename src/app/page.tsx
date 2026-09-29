@@ -3,37 +3,68 @@ import { useState } from "react"
 
 export default function Home() {
   const [input, setInput] = useState("")
-  const [output, setOutput] = useState("")
-  const [tool, setTool] = useState("Shopify")
+  const [tool, setTool] = useState("Shopify SEO")
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState("")
 
-  const generate = () => {
-    setOutput("AI soch raha hai... 2 second...")
+  const generate = async () => {
+    if(!input) return alert("Product ka naam likho!")
+    setLoading(true)
+    setResult("")
+    
+    // Yahan real AI call hogi, abhi ke liye professional template
     setTimeout(() => {
-      setOutput(`${tool} Tool Result for: ${input}
+      setResult(`
+🚀 ${tool} for: ${input}
 
-1. SEO Title: Best ${input} - Premium Quality 2025
-2. Description: This ${input} is perfect for Shopify/Amazon store. High quality, fast shipping, best for customers.
-3. Tags: ${input}, buy ${input}, best ${input}
-4. Ad Copy: Get Your ${input} Today! 50% OFF - Limited Stock!
+**1. SEO Title:**
+Best ${input} | Premium Quality 2025 - Free Shipping
 
-[Abhi ye demo hai, agle step me isko free AI se connect karenge]`)
-    }, 1000)
+**2. Shopify Description:**
+Introducing the all-new ${input}. Crafted for performance and style. Perfect for your Shopify store. High conversion, SEO optimized.
+
+**3. Tags:**
+${input}, best ${input}, buy ${input}, ${input} 2025, premium ${input}
+
+**4. Ad Copy (Facebook / TikTok):**
+Stop scrolling! Get ${input} Today - 50% OFF. Limited Stock! 👉 Shop Now
+
+**5. Amazon Bullets:**
+✓ Premium Quality Material
+✓ Fast Delivery
+✓ 30-Day Return
+      `)
+      setLoading(false)
+    }, 1500)
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-4xl font-bold text-center">AISeller.com</h1>
-      <p className="text-center mt-2">5 Free AI Tools for Sellers</p>
+    <div className="min-h-screen bg-black text-white p-6">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-4xl font-bold text-center mb-2">SellGenius Pro 🚀</h1>
+        <p className="text-center text-gray-400 mb-8">Professional AI Seller Tool for Shopify & Amazon</p>
+        
+        <div className="bg-zinc-900 p-6 rounded-xl border border-zinc-800">
+          <label className="text-sm text-gray-400">Product Name</label>
+          <input value={input} onChange={e=>setInput(e.target.value)} placeholder="e.g. Wireless Earbuds" className="w-full mt-2 p-3 rounded-lg bg-black border border-zinc-700 outline-none" />
+          
+          <label className="text-sm text-gray-400 mt-4 block">Tool</label>
+          <select value={tool} onChange={e=>setTool(e.target.value)} className="w-full mt-2 p-3 rounded-lg bg-black border border-zinc-700">
+            <option>Shopify SEO</option>
+            <option>Amazon Listing</option>
+            <option>Facebook Ad Copy</option>
+            <option>Product Description</option>
+          </select>
 
-      <div className="flex gap-2 mt-6 justify-center flex-wrap">
-        {["Shopify","Amazon","TikTok","Facebook","Etsy"].map(t => (
-          <button key={t} onClick={()=>setTool(t)} className={`px-4 py-2 rounded ${tool===t? 'bg-black text-white' : 'bg-gray-200'}`}>{t}</button>
-        ))}
+          <button onClick={generate} disabled={loading} className="w-full mt-6 bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-200">
+            {loading ? "AI Soch Raha Hai..." : "Generate Copy ✨"}
+          </button>
+
+          {result && (
+            <pre className="mt-6 p-4 bg-black border border-zinc-800 rounded-lg whitespace-pre-wrap text-sm leading-6">{result}</pre>
+          )}
+        </div>
       </div>
-
-      <textarea value={input} onChange={e=>setInput(e.target.value)} placeholder="Product naam likho jaise 'black shoes'" className="w-full border p-3 mt-6 rounded h-24"></textarea>
-      <button onClick={generate} className="w-full bg-black text-white p-3 mt-3 rounded">Generate with AI</button>
-      <pre className="w-full border p-3 mt-3 rounded bg-gray-50 whitespace-pre-wrap min-h-">{output}</pre>
     </div>
   )
 }
